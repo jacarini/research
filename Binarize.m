@@ -2,39 +2,21 @@ clc
 clear
 close all
 
+% Read all JPEG files from a folder
 % Convert microscope image to binary
-% 1b
+% Analyze regoinal properties for orientation
+
 
 d = uigetdir(pwd, 'Select a folder');
 addpath(d);
 Folder = dir(fullfile(d, '*.jpg'));
 prop_sum = [];
 
-% picture = imread('1.jpg');
-
 for i = 1:size(Folder,1)
     d = imread(Folder(i).name);
     rmat = d(:,:,1);
     gmat = d(:,:,2);
     bmat = d(:,:,3);
-    d = im2bw(d);
-    d = imfill(d,'holes');
-
-    [~,threshold] = edge(d,'sobel');
-    fudgeFactor = 1.0;
-    dilate1 = edge(d,'sobel',threshold * fudgeFactor);
-    se90 = strel('line',10,90);
-    se0 = strel('line',10,0);
-    dilate1 = imdilate(dilate1,[se90 se0]);
-    dilate1 = imfill(dilate1,'holes');
-    dilate1 = bwareaopen(dilate1,500);
-    se0 = strel('line',20,0);
-    dilate1 = imdilate(dilate1,se0);
-    dilate1 = imfill(dilate1,'holes');
-    se1 = strel('diamond',3);
-    dilate1 = imerode(dilate1,se1);
-    dilate1 = imerode(dilate1,se1);
-
 
     levelr = 0.39;
     levelg = 0.42;
@@ -77,12 +59,11 @@ fibers = size(M,2);
 x1 = zeros(1,fibers); y1 = zeros(1,fibers); x2 = cos(theta).*M; y2 = M.*sin(theta);
 orientation = atan(y2./x2);
 
+% Figure shows progression of image processing 
 % figure;
-% subplot(2,2,1), imshow(d);
-% title('Original Binary');
+% subplot (2,2,1), imshow(d);
+% title ('Original Image');
 % subplot(2,2,2), imshow(sum_1);
 % title('RGB Layers Combined');
-% subplot(2,2,3), imshow(dilate1);
-% title('Dilated Original');
 % subplot(2,2,4), imshow(BW1);
 % title('Dilated RGB Combination');
