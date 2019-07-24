@@ -52,12 +52,16 @@ end
 M = extractfield(prop_sum,'MajorAxisLength');
 theta = extractfield(prop_sum,'Orientation'); theta = deg2rad(theta);
     
-outliers = M<400; M_out = M(outliers); theta_out = theta(outliers); %scale bar(25um) = 433 pixels
+outliers = M<400; M_out = M(outliers); theta_out = theta(outliers);     %scale bar(25um) = 433 pixels
 M = setdiff(M,M_out); theta = setdiff(theta,theta_out);
     
 fibers = size(M,2);
 x1 = zeros(1,fibers); y1 = zeros(1,fibers); x2 = cos(theta).*M; y2 = M.*sin(theta);
+theta = rad2deg(theta);
 orientation = atan(y2./x2);
+orientation = rad2deg(orientation);
+mean_orientation = mean(orientation,'all');
+median_orientation = median(orientation,'all');
 
 % Figure shows progression of image processing 
 % figure;
