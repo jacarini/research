@@ -41,9 +41,9 @@ for i = 1:size(Folder,1)
     se1 = strel('diamond',3);
     BW = imerode(BW,se1);
     BW = imerode(BW,se1);
-    BW = imfill(BW,'holes');
+    BW = imfill(BW,'holes'); figure; imshow(BW);
     
-    CC = bwconncomp(BW);
+    CC = bwconncomp(BW); 
     properties = regionprops(CC, 'orientation', 'MajorAxisLength', 'MinorAxisLength');
     prop_sum = [prop_sum;properties];
 end
@@ -57,7 +57,9 @@ M = setdiff(M,M_out); theta = setdiff(theta,theta_out);
     
 fibers = size(M,2);
 x1 = zeros(1,fibers); y1 = zeros(1,fibers); x2 = cos(theta).*M; y2 = M.*sin(theta);
-orientation = atan(y2./x2);
+orientation = atan(y2./x2); orientation = rad2deg(orientation);
+avg_orientation = mean(orientation,'all');
+median_orientation = median(orientation,'all');
 
 % Figure shows progression of image processing 
 % figure;
